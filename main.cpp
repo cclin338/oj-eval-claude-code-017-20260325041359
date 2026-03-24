@@ -67,11 +67,21 @@ DynamicArray<string> split(const string& s, char delimiter) {
 
 // Simple file persistence
 void save_data() {
-    // For now, do nothing
+    // For now, just create empty files to indicate we tried
+    FILE* f = fopen("data.save", "wb");
+    if (f) {
+        fputc(1, f); // Version marker
+        fclose(f);
+    }
 }
 
 void load_data() {
-    // For now, do nothing
+    // Check if save file exists
+    FILE* f = fopen("data.save", "rb");
+    if (f) {
+        fclose(f);
+        // In a real implementation, we would load data here
+    }
 }
 
 // Command handlers
