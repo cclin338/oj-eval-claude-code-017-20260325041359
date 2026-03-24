@@ -127,6 +127,19 @@ public:
     bool isEmpty() const {
         return size == 0;
     }
+
+    void clear() {
+        for (int i = 0; i < capacity; i++) {
+            HashNode<T>* current = table[i];
+            while (current) {
+                HashNode<T>* temp = current;
+                current = current->next;
+                delete temp;
+            }
+            table[i] = nullptr;
+        }
+        size = 0;
+    }
 };
 
 #endif // HASH_TABLE_H

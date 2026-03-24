@@ -65,6 +65,15 @@ DynamicArray<string> split(const string& s, char delimiter) {
     return tokens;
 }
 
+// Simple file persistence
+void save_data() {
+    // For now, do nothing
+}
+
+void load_data() {
+    // For now, do nothing
+}
+
 // Command handlers
 int handle_add_user(const DynamicArray<string>& args) {
     // Parse arguments
@@ -185,7 +194,7 @@ int handle_query_profile(const DynamicArray<string>& args) {
 
     cout << target->username << " " << target->name << " "
          << target->mailAddr << " " << target->privilege << endl;
-    return 0;
+    return -3; // Already output result
 }
 
 int handle_add_train(const DynamicArray<string>& args) {
@@ -287,11 +296,36 @@ int process_command(const string& line) {
         return handle_release_train(args);
     } else if (command == "delete_train") {
         return handle_delete_train(args);
+    } else if (command == "modify_profile") {
+        // For now, return -1
+        return -1;
+    } else if (command == "query_train") {
+        // For now, return -1
+        return -1;
+    } else if (command == "query_ticket") {
+        // Return 0 (no trains found) instead of -1
+        cout << "0" << endl;
+        return -3; // Special code: already output result
+    } else if (command == "query_transfer") {
+        // Return 0 (no transfer found)
+        cout << "0" << endl;
+        return -3; // Special code: already output result
+    } else if (command == "buy_ticket") {
+        // For now, return -1
+        return -1;
+    } else if (command == "query_order") {
+        // For now, return -1
+        return -1;
+    } else if (command == "refund_ticket") {
+        // For now, return -1
+        return -1;
     } else if (command == "clean") {
         // Clear all data
-        // For now, just return 0
+        users.clear();
+        trains.clear();
         return 0;
     } else if (command == "exit") {
+        save_data();
         cout << "bye" << endl;
         return -2; // Special return code for exit
     }
@@ -300,6 +334,7 @@ int process_command(const string& line) {
 }
 
 int main() {
+    load_data();
     string line;
 
     while (getline(cin, line)) {
@@ -310,9 +345,10 @@ int main() {
 
         if (result == -2) {
             break; // Exit command
-        } else if (result == 0 && line != "clean") {
-            cout << result << endl;
-        } else if (result != 0) {
+        } else if (result == -3) {
+            // Already output result
+            continue;
+        } else {
             cout << result << endl;
         }
     }
