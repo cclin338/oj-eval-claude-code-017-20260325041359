@@ -3,10 +3,10 @@
 #include <cstdio>
 #include <cstring>
 #include <cstdlib>
-#include <vector>
 #include <sstream>
 
 #include "hash_table.h"
+#include "dynamic_array.h"
 
 using namespace std;
 
@@ -52,8 +52,8 @@ void trim(string& s) {
     s = s.substr(start, end - start + 1);
 }
 
-vector<string> split(const string& s, char delimiter) {
-    vector<string> tokens;
+DynamicArray<string> split(const string& s, char delimiter) {
+    DynamicArray<string> tokens;
     string token;
     istringstream tokenStream(s);
     while (getline(tokenStream, token, delimiter)) {
@@ -66,12 +66,12 @@ vector<string> split(const string& s, char delimiter) {
 }
 
 // Command handlers
-int handle_add_user(const vector<string>& args) {
+int handle_add_user(const DynamicArray<string>& args) {
     // Parse arguments
     string cur_user, username, password, name, mailAddr;
     int privilege = 0;
 
-    for (size_t i = 1; i < args.size(); i++) {
+    for (int i = 1; i < args.size(); i++) {
         if (args[i] == "-c" && i + 1 < args.size()) {
             cur_user = args[++i];
         } else if (args[i] == "-u" && i + 1 < args.size()) {
@@ -122,10 +122,10 @@ int handle_add_user(const vector<string>& args) {
     return -1;
 }
 
-int handle_login(const vector<string>& args) {
+int handle_login(const DynamicArray<string>& args) {
     string username, password;
 
-    for (size_t i = 1; i < args.size(); i++) {
+    for (int i = 1; i < args.size(); i++) {
         if (args[i] == "-u" && i + 1 < args.size()) {
             username = args[++i];
         } else if (args[i] == "-p" && i + 1 < args.size()) {
@@ -142,10 +142,10 @@ int handle_login(const vector<string>& args) {
     return 0;
 }
 
-int handle_logout(const vector<string>& args) {
+int handle_logout(const DynamicArray<string>& args) {
     string username;
 
-    for (size_t i = 1; i < args.size(); i++) {
+    for (int i = 1; i < args.size(); i++) {
         if (args[i] == "-u" && i + 1 < args.size()) {
             username = args[++i];
         }
@@ -160,10 +160,10 @@ int handle_logout(const vector<string>& args) {
     return 0;
 }
 
-int handle_query_profile(const vector<string>& args) {
+int handle_query_profile(const DynamicArray<string>& args) {
     string cur_user, username;
 
-    for (size_t i = 1; i < args.size(); i++) {
+    for (int i = 1; i < args.size(); i++) {
         if (args[i] == "-c" && i + 1 < args.size()) {
             cur_user = args[++i];
         } else if (args[i] == "-u" && i + 1 < args.size()) {
@@ -188,11 +188,11 @@ int handle_query_profile(const vector<string>& args) {
     return 0;
 }
 
-int handle_add_train(const vector<string>& args) {
+int handle_add_train(const DynamicArray<string>& args) {
     string trainID;
     int stationNum = 0, seatNum = 0;
 
-    for (size_t i = 1; i < args.size(); i++) {
+    for (int i = 1; i < args.size(); i++) {
         if (args[i] == "-i" && i + 1 < args.size()) {
             trainID = args[++i];
         } else if (args[i] == "-n" && i + 1 < args.size()) {
@@ -224,10 +224,10 @@ int handle_add_train(const vector<string>& args) {
     return -1;
 }
 
-int handle_release_train(const vector<string>& args) {
+int handle_release_train(const DynamicArray<string>& args) {
     string trainID;
 
-    for (size_t i = 1; i < args.size(); i++) {
+    for (int i = 1; i < args.size(); i++) {
         if (args[i] == "-i" && i + 1 < args.size()) {
             trainID = args[++i];
         }
@@ -242,10 +242,10 @@ int handle_release_train(const vector<string>& args) {
     return 0;
 }
 
-int handle_delete_train(const vector<string>& args) {
+int handle_delete_train(const DynamicArray<string>& args) {
     string trainID;
 
-    for (size_t i = 1; i < args.size(); i++) {
+    for (int i = 1; i < args.size(); i++) {
         if (args[i] == "-i" && i + 1 < args.size()) {
             trainID = args[++i];
         }
@@ -265,7 +265,7 @@ int handle_delete_train(const vector<string>& args) {
 
 // Main command dispatcher
 int process_command(const string& line) {
-    vector<string> args = split(line, ' ');
+    DynamicArray<string> args = split(line, ' ');
 
     if (args.empty()) {
         return -1;
